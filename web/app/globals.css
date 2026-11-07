@@ -1,17 +1,16 @@
 @import "tailwindcss";
 
-/* Uchiha palette. Token names kept from v1 so existing components restyle automatically. */
 @theme {
   --color-paper: #060607;
   --color-card: #0f1013;
   --color-ink: #f1f1f3;
   --color-mute: #8d919b;
   --color-line: #25272d;
-  --color-cobalt: #d91f2e; /* accent: sharingan red */
+  --color-cobalt: #d91f2e; /* accent red */
   --color-ok: #4ade80;
   --color-warn: #f0b429;
   --color-bad: #ff5a5f;
-  --color-rinne: #8b5cf6;
+  --color-accent2: #8b5cf6;
   --font-sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
@@ -21,13 +20,13 @@ body { background: var(--color-paper); color: var(--color-ink); font-family: var
 :focus-visible { outline: 2px solid var(--color-cobalt); outline-offset: 2px; }
 ::selection { background: var(--color-cobalt); color: #fff; }
 
-@keyframes tomoe { to { transform: rotate(360deg); } }
-@keyframes awaken { from { opacity: 0; transform: scale(.4) rotate(-120deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
-@keyframes pulse-red { 0%,100% { opacity: .45; } 50% { opacity: .95; } }
-.spin-slow { animation: tomoe 3.2s linear infinite; }
-.awake-in { animation: awaken .9s cubic-bezier(.2,.8,.2,1) both; }
-.glow { animation: pulse-red 2.2s ease-in-out infinite; }
-/* once the hero has been awakened the whole page picks up the red accent */
+@keyframes spin-ring { to { transform: rotate(360deg); } }
+@keyframes fade-in { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+@keyframes pulse-glow { 0%,100% { opacity: .45; } 50% { opacity: .95; } }
+.spin-slow { animation: spin-ring 1s linear infinite; }
+.awake-in { animation: fade-in .9s cubic-bezier(.2,.8,.2,1) both; }
+.glow { animation: pulse-glow 2.2s ease-in-out infinite; }
+/* once the hero awakens the whole page picks up the red accent */
 html[data-awake] .dz { border-color: var(--color-cobalt); box-shadow: 0 0 60px -20px var(--color-cobalt); }
 
 @media (prefers-reduced-motion: reduce) {

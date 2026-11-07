@@ -125,7 +125,7 @@ async def _create_transfers(
 
     runner: pipeline.JobRunner = request.app.state.runner
     sm = request.app.state.sm
-    for t, adapter in zip(created, adapters, strict=True):
+    for t, adapter in zip(created, adapters):
         runner.submit(
             runner.gated(pipeline.run_matching(sm, t.id, adapter, settings, request.app.state.reranker)),
             name=f"match:{t.id}",

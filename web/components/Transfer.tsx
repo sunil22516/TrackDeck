@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { destinations, getTransfer, rematch, remove, upload, type Transfer } from "@/lib/api";
 import Review from "@/components/Review";
 import Done from "@/components/Done";
-import Sharingan from "@/components/Sharingan";
+import Spinner from "@/components/Sharingan";
 
 const LABEL: Record<string, string> = { musicbrainz: "MusicBrainz, open catalog (free)", mock: "Demo catalog (40 songs)" };
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -118,7 +118,7 @@ export default function Transfer() {
 
           {t.status === "matching" && (
             <div className="mt-6" role="status">
-              <Sharingan spin className="mb-4 h-14 w-14" />
+              <Spinner spin className="mb-4 h-14 w-14" />
               <div className="h-2 overflow-hidden rounded bg-line">
                 <div className="h-full bg-cobalt transition-[width]" style={{ width: `${Math.max(4, (t.processed / Math.max(t.total, 1)) * 100)}%` }} />
               </div>

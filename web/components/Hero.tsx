@@ -1,15 +1,14 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Sharingan from "./Sharingan";
 
-// Both portraits share one aspect ratio, so one layout calculation positions the eye overlays on either image.
+// Both portraits share one aspect ratio, so one layout calculation positions the glow overlays on either image.
 const AR = 852 / 1846;
-const EYE_Y = 0.609; // vertical focus: keep the eyes mid-screen on wide viewports
+const EYE_Y = 0.609; // vertical focus: keep the glows mid-screen on wide viewports
 const EYES = [
-  { x: 0.299, y: 0.608, r: 0.047, kind: "sharingan" as const },
-  { x: 0.701, y: 0.61, r: 0.047, kind: "rinnegan" as const },
+  { x: 0.299, y: 0.608, r: 0.047, color: "#ff1a2a" as const },
+  { x: 0.701, y: 0.61, r: 0.047, color: "#8b5cf6" as const },
 ];
-const AWAKEN_AT = 2.4; // how much pointer travel (in hero widths) before the eyes open
+const AWAKEN_AT = 2.4; // how much pointer travel (in hero widths) before the effect fires
 
 const VERT = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 const FLUID = `
@@ -164,25 +163,24 @@ export default function Hero() {
       <canvas ref={canvas} className="absolute inset-0 h-full w-full" aria-hidden />
       {fallback && <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${awake ? "/bottom.jpg" : "/top.jpg"})` }} aria-hidden />}
 
-      {/* the awakening: red bloom, then a spinning Sharingan locks onto the left eye; Rinnegan ripples on the right */}
+      {/* mouse-driven reveal: colour blooms appear on the portrait when you've moved enough */}
       {awake && eyes.map((e, i) => (
         <div key={i} className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2" style={{ left: e.left, top: e.top, width: e.size, height: e.size }} aria-hidden>
-          <div className={`glow absolute -inset-[140%] rounded-full blur-2xl ${EYES[i].kind === "sharingan" ? "bg-[radial-gradient(circle,#ff1a2a_0%,transparent_65%)]" : "bg-[radial-gradient(circle,#8b5cf6_0%,transparent_65%)]"}`} />
-          {EYES[i].kind === "sharingan" && <Sharingan spin className="awake-in relative h-full w-full mix-blend-screen" />}
+          <div className={`glow absolute -inset-[140%] rounded-full blur-2xl`} style={{ background: `radial-gradient(circle, ${EYES[i].color}80 0%, transparent 65%)` }} />
         </div>
       ))}
       {awake && <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_55%,transparent_40%,rgba(217,31,46,.22)_100%)]" aria-hidden />}
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col gap-5 px-6 pb-10 text-white sm:px-10" style={{ mixBlendMode: "difference" }}>
         <p className="text-xs font-semibold uppercase tracking-[0.25em]" role="status">
-          {awake ? "● Sharingan active · matching engine online" : "Playlist transfer · no login · free"}
+          {awake ? "● Matching engine online" : "Playlist transfer · no login · free"}
         </p>
         <h1 className="max-w-3xl text-5xl font-black uppercase leading-[0.92] tracking-tighter sm:text-7xl lg:text-8xl">
           Every song.<br />The right version.
         </h1>
         <div className="pointer-events-auto flex flex-wrap items-center gap-5">
           <a href="#transfer" className="rounded bg-white px-6 py-3 text-sm font-bold uppercase tracking-wider text-black">Begin transfer</a>
-          <span className={`text-xs uppercase tracking-widest transition-opacity duration-700 ${awake ? "opacity-0" : "opacity-80"}`}>Drag across the face to open the eyes</span>
+          <span className={`text-xs uppercase tracking-widest transition-opacity duration-700 ${awake ? "opacity-0" : "opacity-80"}`}>Move your mouse across the image</span>
         </div>
       </div>
     </section>
